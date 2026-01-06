@@ -22,6 +22,14 @@
             display: flex;
             flex-direction: column;
         }
+        /* Nasconde la scrollbar per un look più "App" */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
     </style>
 <script type="importmap">
 {
@@ -40,7 +48,7 @@
 </head>
 <body>
     <div id="root"></div>
-    <!-- Questo tag è fondamentale: dice al browser di caricare l'app React -->
+    <!-- Vite leggerà questo file e includerà tutto il necessario nel build finale -->
     <script type="module" src="/index.tsx"></script>
 </body>
 </html>
