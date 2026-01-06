@@ -1,20 +1,18 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-/**
- * Suggerisce le impostazioni di stampa. 
- * Se la chiave API non è presente, restituisce un errore gestito invece di far crashare l'app.
- */
 export const suggestSettings = async (material: string, brand: string) => {
+  // Recupero della chiave
   const apiKey = process.env.API_KEY;
   
-  // Se la chiave è mancante o è una stringa vuota/placeholder, usciamo subito senza errori fatali
+  // Se la chiave non è configurata correttamente, non procediamo nemmeno
+  // Questo evita l'errore "An API Key must be set" che blocca l'app
   if (!apiKey || apiKey === "undefined" || apiKey.trim() === "" || apiKey.includes("YOUR_")) {
-    console.warn("AI inattiva: API_KEY non trovata nelle variabili d'ambiente.");
+    console.warn("AI in pausa: Configura la API_KEY su Vercel per attivare i suggerimenti.");
     return { error: "API_KEY_MISSING" };
   }
 
   try {
-    // Inizializziamo solo se abbiamo una chiave plausibile
+    // Inizializziamo il client solo se abbiamo una chiave valida
     const ai = new GoogleGenAI({ apiKey });
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
@@ -38,7 +36,7 @@ export const suggestSettings = async (material: string, brand: string) => {
     const text = response.text;
     return text ? JSON.parse(text) : null;
   } catch (error) {
-    console.error("Errore chiamata AI:", error);
+    console.error("Errore durante la chiamata AI:", error);
     return null;
   }
 };
